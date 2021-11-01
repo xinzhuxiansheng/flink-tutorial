@@ -3,6 +3,7 @@ package com.yzhou.perf;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 import org.apache.flink.api.common.time.Time;
+import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
@@ -24,13 +25,21 @@ public class KafkaProducerPerfTestJob {
 
     public static void main(String[] args) throws Exception {
         //注意包名 java/scala
-        //StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        //StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironment();
         logger.info("========================running job without checkpoint===========================");
         env.setRestartStrategy(RestartStrategies.failureRateRestart(3, Time.of(1, TimeUnit.MINUTES), Time.of(10, TimeUnit.MINUTES)));
 
+        ParameterTool parameterTool = ParameterTool.fromArgs(args);
+        String bootstrapServers = parameterTool.get("bootstrapServers");
+        String topic = parameterTool.get("topic");
+        String singleTaskQPS = parameterTool.get("singleTaskQPS");
+        String recordSize = parameterTool.get("recordSize");
+
+
         Map<String, Object> kafkaConf = new HashMap<>();
-        kafkaConf.put("bootstrap.servers", "192.168.70.34:9092");
+        //kafkaConf.put("bootstrap.servers", bootstrapServers);
+        kafkaConf.put("bootstrap.servers", "10.24.15.123:9092");
         kafkaConf.put("acks", "1");
         kafkaConf.put("batch.size", 1024000); //1MB
         kafkaConf.put("compression.type", "snappy");
@@ -58,7 +67,7 @@ public class KafkaProducerPerfTestJob {
             @Override
             public String map(String s) throws Exception {
 
-                producer.send(new ProducerRecord<>("yzhoutp01", s), new Callback() {
+                producer.send(new ProducerRecord<>("yzhoutp02", s), new Callback() {
                     @Override
                     public void onCompletion(RecordMetadata recordMetadata, Exception e) {
                         if (null == recordMetadata) {
