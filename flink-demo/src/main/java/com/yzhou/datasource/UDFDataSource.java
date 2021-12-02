@@ -35,7 +35,7 @@ public class UDFDataSource {
             Random random = new Random();
 
             HashMap<String, Double> sensorTempMap = new HashMap<>();
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < 5; i++) {
                 sensorTempMap.put("sensor_" + (i + 1), 60 + random.nextGaussian() * 20);
             }
 
@@ -46,7 +46,7 @@ public class UDFDataSource {
                     ctx.collect(new SensorReading(sensorId, System.currentTimeMillis(), newTemp));
                 }
                 //控制输出频率
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             }
         }
 

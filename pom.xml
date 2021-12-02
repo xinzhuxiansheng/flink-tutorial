@@ -10,7 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>flink-perf</module>
-        <module>flink-java</module>
+        <module>flink-demo</module>
     </modules>
 
     <properties>
@@ -18,4 +18,11 @@
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>2.12.15</version>
+        </dependency>
+    </dependencies>
 </project>
