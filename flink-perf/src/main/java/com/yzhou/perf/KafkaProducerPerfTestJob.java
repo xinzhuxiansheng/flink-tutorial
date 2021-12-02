@@ -39,15 +39,15 @@ public class KafkaProducerPerfTestJob {
 
         Map<String, Object> kafkaConf = new HashMap<>();
         //kafkaConf.put("bootstrap.servers", bootstrapServers);
-        kafkaConf.put("bootstrap.servers", "10.24.15.123:9092");
+        kafkaConf.put("bootstrap.servers", bootstrapServers);
         kafkaConf.put("acks", "1");
         kafkaConf.put("batch.size", 1024000); //1MB
         kafkaConf.put("compression.type", "snappy");
         kafkaConf.put("linger.ms", 200);
 
         Map<String,Object> sourceConf = new HashMap<>();
-        sourceConf.put("singleTaskQPS",10000);
-        sourceConf.put("recordSize",1024);
+        sourceConf.put("singleTaskQPS",singleTaskQPS);
+        sourceConf.put("recordSize",recordSize);
 
         DataStreamSource<String> source = env.addSource(new SourceTest(sourceConf));
         DataStream<String> filterSSData = source.map(new RichMapFunction<String, String>() {
@@ -57,6 +57,7 @@ public class KafkaProducerPerfTestJob {
             @Override
             public void open(Configuration parameters) throws Exception {
                 super.open(parameters);
+                logger.info("yzhou producer");
                 producer = new KafkaProducer<String, String>(producerProperties(
                         kafkaConf.get("bootstrap.servers"),
                         kafkaConf.get("batch.size"),
@@ -67,7 +68,7 @@ public class KafkaProducerPerfTestJob {
             @Override
             public String map(String s) throws Exception {
 
-                producer.send(new ProducerRecord<>("yzhoutp02", s), new Callback() {
+                producer.send(new ProducerRecord<>(topic, s), new Callback() {
                     @Override
                     public void onCompletion(RecordMetadata recordMetadata, Exception e) {
                         if (null == recordMetadata) {
@@ -84,6 +85,7 @@ public class KafkaProducerPerfTestJob {
 
     //定义动态修改的参数
     private static Properties producerProperties(Object bootstrapServers, Object batchSize, Object compressionType, Object lingerMs) {
+        logger.info("yzhou producerProperties");
         Properties properties = new Properties();
         properties.put("bootstrap.servers", bootstrapServers);
         properties.put("max.request.size", 10485760);

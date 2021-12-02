@@ -22,9 +22,9 @@ public class SourceTest extends RichParallelSourceFunction<String> {
     private long counter = 0L;
     private Random random;
     private Semaphore semaphore = null;
-    private Map<String,Object> commandLine;
+    private Map<String, Object> commandLine;
 
-    public SourceTest(Map<String,Object> commandLine){
+    public SourceTest(Map<String, Object> commandLine) {
         this.commandLine = commandLine;
     }
 
@@ -34,11 +34,11 @@ public class SourceTest extends RichParallelSourceFunction<String> {
     @Override
     public void open(Configuration parameters) throws Exception {
         super.open(parameters);
-        if(commandLine.containsKey("singleTaskQPS")){
-            max = (int) commandLine.get("singleTaskQPS");
+        if (commandLine.containsKey("singleTaskQPS")) {
+            max = Integer.parseInt(commandLine.get("singleTaskQPS").toString());
         }
-        if(commandLine.containsKey("recordSize")){
-            recordSize = (int) commandLine.get("recordSize");
+        if (commandLine.containsKey("recordSize")) {
+            recordSize = Integer.parseInt(commandLine.get("recordSize").toString());
         }
         random = new Random();
         semaphore = new Semaphore(max);

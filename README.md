@@ -2,3 +2,4 @@
 
 
 ## flink-perf
+mvn clean package -DskipTests=true  

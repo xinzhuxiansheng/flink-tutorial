@@ -46,9 +46,7 @@
                 </filter>
               </filters>
               <transformers>
-                <transformer>
-                  <mainClass>com.yzhou.perf.KafkaProducerPerfTestJob</mainClass>
-                </transformer>
+                <transformer />
               </transformers>
             </configuration>
           </execution>
