@@ -31,7 +31,7 @@
 
     <Loggers>
         <!-- 配置日志的根节点 -->
-        <root level="info">
+        <root level="warn">
             <appender-ref ref="console_out_appender" />
             <appender-ref ref="console_err_appender" />
         </root>
