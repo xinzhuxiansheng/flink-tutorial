@@ -2,11 +2,12 @@ package com.yzhou.apitest
 
 import org.apache.flink.streaming.api.TimeCharacteristic
 import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor
-import org.apache.flink.streaming.api.functions.{AssignerWithPeriodicWatermarks, AssignerWithPunctuatedWatermarks}
+import org.apache.flink.streaming.api.functions.{AssignerWithPeriodicWatermarks, AssignerWithPunctuatedWatermarks, KeyedProcessFunction}
 import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.api.watermark.Watermark
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows
 import org.apache.flink.streaming.api.windowing.time.Time
+import org.apache.flink.util.Collector
 
 // 定义传感器数据样例类
 case class SensorReading(id: String, timestamp: Long, temperature: Double)
@@ -34,6 +35,7 @@ object WindowsTest {
         override def extractTimestamp(t: SensorReading): Long = t.timestamp * 1000
       })
 
+    // 统计15秒内的最小温度，每隔5秒输出一次
     val minTempPerWindowStream = dataStream
       .map(data => (data.id, data.temperature))
       .keyBy(_._1)
@@ -44,10 +46,11 @@ object WindowsTest {
       .timeWindow(Time.seconds(15), Time.seconds(5)) //开时间窗口
       .reduce((data1, data2) => (data1._1, data1._2.min(data2._2))) //用reduce做增量聚合
 
-
-
     minTempPerWindowStream.print("min temp")
     dataStream.print("input data")
+
+    dataStream.keyBy(_.id)
+      .process(new MyProcess())
 
     env.execute("window test")
   }
@@ -71,4 +74,10 @@ class MyAssigner() extends AssignerWithPunctuatedWatermarks[SensorReading] {
   override def checkAndGetNextWatermark(t: SensorReading, l: Long): Watermark = new Watermark(l);
 
   override def extractTimestamp(t: SensorReading, l: Long): Long = t.timestamp * 1000
+}
+
+class MyProcess() extends KeyedProcessFunction[String,SensorReading,String]{
+  override def processElement(value: SensorReading, ctx: KeyedProcessFunction[String, SensorReading, String]#Context, out: Collector[String]): Unit = {
+    ctx.timerService()
+  }
 }
