@@ -8,7 +8,7 @@ import org.apache.flink.streaming.api.scala._
 import org.apache.flink.streaming.api.windowing.time.Time
 import org.apache.flink.util.Collector
 
-class ProcessFuncationTest {
+object ProcessFuncationTest {
   def main(args: Array[String]): Unit = {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
     env.setParallelism(1)
@@ -34,7 +34,7 @@ class ProcessFuncationTest {
       .process(new TempIncreAlert())
 
     dataStream.print("input data")
-
+    processedStream.print("processed data")
 
     env.execute("window test")
   }
@@ -57,7 +57,7 @@ class TempIncreAlert() extends KeyedProcessFunction[String, SensorReading, Strin
 
     // 温度上升且没有设过定时器，则注册定时器
     if (value.temperature > preTemp && curTimerTs == 0) {
-      val timeTs = ctx.timerService().currentProcessingTime() + 1000
+      val timeTs = ctx.timerService().currentProcessingTime() + 10000
       ctx.timerService().registerProcessingTimeTimer(timeTs)
       currentTimer.update(timeTs)
     } else if (value.temperature < preTemp || preTemp == 0.0) {
@@ -67,5 +67,9 @@ class TempIncreAlert() extends KeyedProcessFunction[String, SensorReading, Strin
     }
   }
 
-  override def onTimer(timestamp: Long, ctx: KeyedProcessFunction[String, SensorReading, String]#OnTimerContext, out: Collector[String]): Unit = super.onTimer(timestamp, ctx, out)
+  override def onTimer(timestamp: Long, ctx: KeyedProcessFunction[String, SensorReading, String]#OnTimerContext, out: Collector[String]): Unit = {
+    // 输出报警信息
+    out.collect(ctx.getCurrentKey + " 温度连续上升")
+    currentTimer.clear()
+  }
 }
