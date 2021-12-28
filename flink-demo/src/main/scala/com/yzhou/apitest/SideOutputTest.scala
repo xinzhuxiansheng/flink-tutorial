@@ -32,8 +32,8 @@ object SideOutPutTest {
     val processedStream = dataStream
       .process(new FreezingAlert())
 
-    dataStream.print("input data")
     processedStream.print("processed data")
+    processedStream.getSideOutput(new OutputTag[String]("freezing alert")).print("alert data")
 
     env.execute("window test")
   }
