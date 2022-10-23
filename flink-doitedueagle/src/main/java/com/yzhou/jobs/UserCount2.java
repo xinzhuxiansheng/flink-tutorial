@@ -58,7 +58,6 @@ public class UserCount2 {
                 return Tuple3.of(value.getProvince(), value.getIsNew(), 1);
             }
         }).keyBy(new KeySelector<Tuple3<String, Integer, Integer>, Tuple2<String, Integer>>() {
-
             @Override
             public Tuple2<String, Integer> getKey(Tuple3<String, Integer, Integer> value) throws Exception {
                 return Tuple2.of(value.f0, value.f1);
