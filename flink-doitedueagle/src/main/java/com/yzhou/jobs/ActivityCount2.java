@@ -78,7 +78,7 @@ public class ActivityCount2 {
                 ValueStateDescriptor<Integer> uidCountStateDecriptor = new ValueStateDescriptor<Integer>("uid-count-state", Integer.class);
                 countState = getRuntimeContext().getState(uidCountStateDecriptor);
 
-                ValueStateDescriptor<Integer> countStateDescriptor = new ValueStateDescriptor<>("uid-count-state", Integer.class);
+                ValueStateDescriptor<Integer> countStateDescriptor = new ValueStateDescriptor<>("count-state", Integer.class);
                 uidCountState = getRuntimeContext().getState(countStateDescriptor);
             }
 
