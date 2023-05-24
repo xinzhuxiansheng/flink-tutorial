@@ -11,6 +11,7 @@
     <modules>
 
         <module>flink-doitedueagle</module>
+        <module>doit30-flink</module>
     </modules>
 
     <properties>
