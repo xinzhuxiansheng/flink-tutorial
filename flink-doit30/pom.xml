@@ -9,7 +9,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>doit30-flink</artifactId>
+    <artifactId>flink-doit30</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -185,7 +185,11 @@
             <artifactId>flink-core</artifactId>
             <version>${flink.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.ververica</groupId>
+            <artifactId>flink-connector-mysql-cdc</artifactId>
+            <version>2.3.0</version>
+        </dependency>
 
 
     </dependencies>

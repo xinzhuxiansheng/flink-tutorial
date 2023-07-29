@@ -11,7 +11,10 @@
     <modules>
 
         <module>flink-doitedueagle</module>
-        <module>doit30-flink</module>
+        <module>flink-doit30</module>
+        <module>flink-learn</module>
+        <module>flink-common</module>
+        <module>flink-cdc</module>
     </modules>
 
     <properties>
