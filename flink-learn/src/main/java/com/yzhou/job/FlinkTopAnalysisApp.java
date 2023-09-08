@@ -1,7 +1,7 @@
 package com.yzhou.job;
 
 import com.alibaba.fastjson.JSON;
-import com.yzhou.common.util.DateUtils;
+import com.yzhou.common.utils.DateUtil;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -29,7 +29,7 @@ public class FlinkTopAnalysisApp {
         }).map(new MapFunction<Access, Tuple3<String, String, Long>>() {
             @Override
             public Tuple3<String, String, Long> map(Access x) throws Exception {
-                return Tuple3.of(x.getName(), DateUtils.ts2Date(x.getTs(), "yyyyMMdd"), 1L);
+                return Tuple3.of(x.getName(), DateUtil.ts2Date(x.getTs(), "yyyyMMdd"), 1L);
             }
         }).keyBy(new KeySelector<Tuple3<String, String, Long>, Tuple2<String, String>>() {
             @Override

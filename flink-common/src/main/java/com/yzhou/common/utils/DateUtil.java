@@ -1,4 +1,4 @@
-package com.yzhou.common.util;
+package com.yzhou.common.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * 时间处理工具类
  */
-public class DateUtils {
+public class DateUtil {
 
     /**
      *

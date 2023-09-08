@@ -4,6 +4,7 @@ import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 import org.apache.flink.api.common.time.Time;
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
@@ -19,10 +20,12 @@ public class StreamWordCount {
 
     public static void main(String[] args) throws Exception {
         // 1. 创建流式执行环境
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        //StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
+
         env.setRestartStrategy(RestartStrategies.fixedDelayRestart(3, Time.of(10, TimeUnit.SECONDS)));
         // 2. 读取文本流  在k8s01行运行 nc -lk 7777
-        DataStreamSource<String> lineDSS = env.socketTextStream("192.168.0.140", 7777);
+        DataStreamSource<String> lineDSS = env.socketTextStream("yzhou.com", 7777);
         // 3. 转换数据格式
         SingleOutputStreamOperator<Tuple2<String, Long>> wordAndOne = lineDSS
                 .flatMap((String line, Collector<String> words) -> {

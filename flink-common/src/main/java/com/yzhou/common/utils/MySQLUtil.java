@@ -1,9 +1,9 @@
-package com.yzhou.common.util;
+package com.yzhou.common.utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-public class MySQLUtils {
+public class MySQLUtil {
 
     public static Connection getConnection() throws Exception {
 
