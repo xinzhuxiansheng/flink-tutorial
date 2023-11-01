@@ -17,9 +17,9 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
-public class SqlRunner02 {
+public class SqlRunner_DefinedBySQL {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SqlRunner02.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SqlRunner_DefinedBySQL.class);
 
     private static final String STATEMENT_DELIMITER = ";"; // a statement should end with `;`
     private static final String LINE_DELIMITER = "\n";
@@ -52,8 +52,7 @@ public class SqlRunner02 {
             tableResult = tableEnvironment.executeSql(statement);
         }
 //        ** executeSql是一个异步的接口，在idea里面跑的话，直接就结束了，需要手动拿到那个executeSql的返回的TableResult
-        //tableResult.getJobClient().get().getJobExecutionResult().get();
-        tableResult.print();
+        tableResult.getJobClient().get().getJobExecutionResult().get();
     }
 
     public static List<String> parseStatements(String script) {

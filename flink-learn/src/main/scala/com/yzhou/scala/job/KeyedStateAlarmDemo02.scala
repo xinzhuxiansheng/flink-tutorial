@@ -10,7 +10,7 @@ import org.apache.flink.util.Collector
 /**
  * 温度告警，ValueState，当某个机房的相连温度值差 达到一定阈值，则触发报警
  */
-object KeyedStateAlarmDemo {
+object KeyedStateAlarmDemo02 {
   def main(args: Array[String]): Unit = {
     val env = StreamExecutionEnvironment.getExecutionEnvironment
     env.setRuntimeMode(RuntimeExecutionMode.AUTOMATIC);

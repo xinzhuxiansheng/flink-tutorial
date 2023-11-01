@@ -2,6 +2,7 @@ package com.yzhou.job.sql;
 
 import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 import org.apache.flink.api.common.time.Time;
+import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.TableResult;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
@@ -15,10 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+// 使用当前 测试
+public class SqlRunner_PrintResult {
 
-public class SqlRunner {
-
-    private static final Logger LOG = LoggerFactory.getLogger(SqlRunner.class);
+    private static final Logger LOG = LoggerFactory.getLogger(SqlRunner_PrintResult.class);
 
     private static final String STATEMENT_DELIMITER = ";"; // a statement should end with `;`
     private static final String LINE_DELIMITER = "\n";
@@ -26,7 +27,7 @@ public class SqlRunner {
     private static final String COMMENT_PATTERN = "(--.*)|(((\\/\\*)+?[\\w\\W]+?(\\*\\/)+))";
 
     public static void main(String[] args) throws Exception {
-        String scriptFilePath = "/Users/a/Code/Java/flink-tutorial/flink-sql/src/main/resources/simple.sql";
+        String scriptFilePath = "/Users/a/Code/Java/flink-tutorial/flink-sql/src/main/resources/MySQLCDCSource.sql";
         if (args.length == 1) {
             scriptFilePath = args[0];
         }
@@ -35,7 +36,8 @@ public class SqlRunner {
         List<String> statements = parseStatements(script);
 
         //建立Stream环境，设置并行度为1
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment().setParallelism(1);
+        //StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment().setParallelism(1);
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration()).setParallelism(2);
         env.setRestartStrategy(RestartStrategies.fixedDelayRestart(
                 3, // 尝试重启的次数
                 Time.of(10, TimeUnit.SECONDS) // 间隔

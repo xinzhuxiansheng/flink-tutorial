@@ -45,9 +45,6 @@ public class Demo1_TableSql {
                 .select($("gender"), $("age").avg())
                 .execute()
                 .print();
-
-
         tableEnv.executeSql("select gender,avg(age) as avg_age  from  t_kafka group by gender").print();
-
     }
 }

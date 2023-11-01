@@ -1,6 +1,8 @@
 package com.yzhou.sql.scala.join
 
-import org.apache.flink.configuration.CoreOptions
+import org.apache.flink.configuration.{Configuration, CoreOptions}
+import org.apache.flink.streaming.api.scala.StreamExecutionEnvironment
+import org.apache.flink.table.api.bridge.scala.StreamTableEnvironment
 import org.apache.flink.table.api.{EnvironmentSettings, TableEnvironment}
 
 import java.time.ZoneId
@@ -10,16 +12,27 @@ import java.time.ZoneId
  */
 object LookupJoinInnerJoin {
   def main(args: Array[String]): Unit = {
+    val sEnv = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration())
+
     //创建执行环境
     val settings = EnvironmentSettings
       .newInstance()
       .inStreamingMode()
       .build()
-    val tEnv = TableEnvironment.create(settings)
+    val tEnv = StreamTableEnvironment.create(sEnv,settings)
+
+
+    //创建执行环境
+//    val settings = EnvironmentSettings
+//      .newInstance()
+//      .inStreamingMode()
+//      .build()
+//    val tEnv = TableEnvironment.create(settings)
+
 
     //设置全局并行度为1
     // tEnv.getConfig.set(CoreOptions.DEFAULT_PARALLELISM.key(), "1")
-    tEnv.getConfig.getConfiguration.set[Integer](CoreOptions.DEFAULT_PARALLELISM, 1);
+    tEnv.getConfig.getConfiguration.set[Integer](CoreOptions.DEFAULT_PARALLELISM, 2);
 
     //指定国内的时区
     tEnv.getConfig.setLocalTimeZone(ZoneId.of("Asia/Shanghai"))
