@@ -8,7 +8,7 @@ import org.apache.flink.table.api.TableResult;
 import org.apache.flink.table.api.bridge.java.StreamStatementSet;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 
-public class MySQLCDC2Kafka {
+public class Kafka2MySql01 {
 
     public static void main(String[] args) {
 
@@ -20,21 +20,21 @@ public class MySQLCDC2Kafka {
 
         // 注册表
         // kafka
-        String createSourceTableSql = FileUtil.readFile("/Users/a/Code/Java/flink-tutorial/flink-learn/src/main/resources/mysqlcdc2kafka/01mysqlcdcCreateTable.sql");
-        TableResult sourceTableResult = tableEnv.executeSql(createSourceTableSql);
+        String createKafkaTableSql = FileUtil.readFile("/Users/a/Code/Java/flink-tutorial/flink-learn/src/main/resources/kafka2mysql/01KafkaCreateTable.sql");
+        TableResult kafkaTableResult = tableEnv.executeSql(createKafkaTableSql);
         // mysql
-        String createSinkTableSql = FileUtil.readFile("/Users/a/Code/Java/flink-tutorial/flink-learn/src/main/resources/mysqlcdc2kafka/01KafkaCreateTable.sql");;
-        TableResult sinkTableResult = tableEnv.executeSql(createSinkTableSql);
+        String createMySQLTableSql = FileUtil.readFile("/Users/a/Code/Java/flink-tutorial/flink-learn/src/main/resources/kafka2mysql/01mysqlCreateTable.sql");;
+        TableResult mysqlTableResult = tableEnv.executeSql(createMySQLTableSql);
 
         // 转 Table
-        String querySourceTableSql = "select * from mysqlcdc_source";
-        Table sourceTable = tableEnv.sqlQuery(querySourceTableSql);
+        String queryKafkaTableSql = "select * from kafka_source";
+        Table kafkaTable = tableEnv.sqlQuery(queryKafkaTableSql);
 
         // 创建 kafka 临时表
         // tableEnv.createTemporaryView("kafka", kafkaTable);
 
         StreamStatementSet statementSet = tableEnv.createStatementSet();
-        statementSet.addInsert("kafka_sink",sourceTable);
+        statementSet.addInsert("mysql_sink",kafkaTable);
 
         // 执行
         statementSet.execute();

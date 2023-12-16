@@ -12,9 +12,9 @@ WITH
     'hostname' = 'localhost',
     'port' = '3306',
     'username' = 'root',
-    'password' = '123456',
-    'database-name' = 'source_yzhou_test03',
-    'table-name' = 'your-table-name',
+    'password' = '12345678',
+    'database-name' = 'yzhou_test',
+    'table-name' = 'source_yzhou_test03',
     'scan.startup.mode' = 'initial', -- 或者使用 'latest-offset', 'timestamp' 等
     'server-time-zone' = 'Asia/Shanghai' -- 根据你的时区设置
 );
