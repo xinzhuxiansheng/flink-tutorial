@@ -20,7 +20,7 @@
         <flink.version>1.14.6</flink.version>
         <log4j.version>2.18.0</log4j.version>
         <slf4j.version>1.7.30</slf4j.version>
-        <scala.version>2.12.8</scala.version>
+        <scala.version>2.12.18</scala.version>
     </properties>
 
     <dependencies>
@@ -176,23 +176,6 @@
 <!--            <scope>compile</scope>-->
         </dependency>
 
-        <dependency>
-            <groupId>org.scala-lang</groupId>
-            <artifactId>scala-library</artifactId>
-            <version>${scala.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.scala-lang</groupId>
-            <artifactId>scala-compiler</artifactId>
-            <version>${scala.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.yzhou</groupId>
-            <artifactId>flink-connector-http-1.15</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
         <!--CDC-->
         <dependency>
             <groupId>com.ververica</groupId>
@@ -206,6 +189,13 @@
             <version>${flink.version}</version>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.doris</groupId>
+            <artifactId>flink-doris-connector-1.15</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+
 
     </dependencies>
 

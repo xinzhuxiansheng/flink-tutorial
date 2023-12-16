@@ -27,7 +27,7 @@ public class SqlRunner_PrintResult {
     private static final String COMMENT_PATTERN = "(--.*)|(((\\/\\*)+?[\\w\\W]+?(\\*\\/)+))";
 
     public static void main(String[] args) throws Exception {
-        String scriptFilePath = "/Users/a/Code/Java/flink-tutorial/flink-sql/src/main/resources/MySQLCDCSource.sql";
+        String scriptFilePath = "/Users/a/Code/Java/flink-tutorial/flink-sql/src/main/resources/Kafka2Doris.sql";
         if (args.length == 1) {
             scriptFilePath = args[0];
         }
