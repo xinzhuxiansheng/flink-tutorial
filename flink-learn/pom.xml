@@ -212,11 +212,10 @@
             <artifactId>flink-shaded-guava</artifactId>
             <version>30.1.1-jre-16.1</version>
         </dependency>
-
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.33</version>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>8.2.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.flink</groupId>
@@ -234,8 +233,6 @@
             <artifactId>flink-connector-jdbc</artifactId>
             <version>1.15.4</version>
         </dependency>
-
-
 
         <!-- 引入日志管理相关依赖-->
         <dependency>
@@ -263,6 +260,11 @@
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-compiler</artifactId>
             <version>${scala.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.doris</groupId>
+            <artifactId>flink-doris-connector-1.15</artifactId>
+            <version>1.4.0</version>
         </dependency>
 
     </dependencies>
@@ -308,7 +310,7 @@
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
-                <version>4.3.0</version>
+                <version>4.8.0</version>
                 <executions>
                     <execution>
                         <goals>

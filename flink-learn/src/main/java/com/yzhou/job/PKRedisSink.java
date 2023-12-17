@@ -25,7 +25,6 @@ public class PKRedisSink extends RichSinkFunction<Tuple3<String, String, Long>>{
         jedis.hset(value.f0, value.f1, value.f2.toString());
 
     }
-
     @Override
     public void close() throws Exception {
         if(null != jedis) jedis.close();
