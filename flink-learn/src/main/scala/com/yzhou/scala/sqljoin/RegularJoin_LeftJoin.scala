@@ -6,9 +6,9 @@ import org.apache.flink.table.api.{EnvironmentSettings, TableEnvironment}
 import java.time.ZoneId
 
 /**
- * 普通 Join（Regular Join) 之 Inner Join
+ * 普通 Join（Regular Join) 之 Left Join
  */
-object RegularJoin_InnerJoin {
+object RegularJoin_LeftJoin {
   def main(args: Array[String]): Unit = {
     val settings = EnvironmentSettings
       .newInstance()
@@ -30,7 +30,7 @@ object RegularJoin_InnerJoin {
     tEnv.executeSql(paymentFlowTableSql)
 
     // 结果表
-    val resTableSql = FileUtil.readFile("/Users/a/Code/Java/flink-tutorial/flink-learn/src/main/resources/join/regularjoin/orderpayment.sql")
+    val resTableSql = FileUtil.readFile("/Users/a/Code/Java/flink-tutorial/flink-learn/src/main/resources/join/regularjoin/orderpayment_upsert.sql")
     tEnv.executeSql(resTableSql)
 
     // 关联订单表和支付表
@@ -42,8 +42,8 @@ object RegularJoin_InnerJoin {
         | uo.d_timestamp,
         | pf.pay_money
         |FROM user_order AS uo
-        |-- 这里使用 INNER JOIN 或者 JOIN 是一样的效果
-        |INNER JOIN payment_flow AS pf ON uo.order_id = pf.order_id
+        |-- 这里使用 LEFT JOIN 或者 LEFT OUTER JOIN 是一样的效果
+        |LEFT JOIN payment_flow AS pf ON uo.order_id = pf.order_id
         |""".stripMargin
 
     tEnv.executeSql(joinSql)
