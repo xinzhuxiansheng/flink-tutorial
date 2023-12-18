@@ -13,8 +13,11 @@ CREATE TABLE `doris_sink` (
     'password' = '',
     'sink.max-retries' = '3',
     'sink.properties.format' = 'json',
-    'sink.enable-delete'='false',
-    'sink.label-prefix' = 'doris_label_yzhou3',
+    'sink.enable-delete'='true',
+    'sink.label-prefix' = 'doris_label_yzhou_103',
     'sink.properties.format' = 'json',
-    'sink.properties.read_json_by_line' = 'true'
+    'sink.properties.read_json_by_line' = 'true',
+    'sink.properties.customdelete_name' = 'op_type',
+    'sink.properties.customdelete_value' = 'D'
+
 );

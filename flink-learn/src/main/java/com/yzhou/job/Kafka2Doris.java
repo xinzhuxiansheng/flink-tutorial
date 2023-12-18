@@ -2,6 +2,7 @@ package com.yzhou.job;
 
 import com.yzhou.common.utils.FileUtil;
 import org.apache.flink.api.common.RuntimeExecutionMode;
+import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.TableResult;
@@ -17,17 +18,25 @@ public class Kafka2Doris {
         env.enableCheckpointing(5000);
 
         StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
+        // 设置 checkpoint 模式（例如，EXACTLY_ONCE 或 AT_LEAST_ONCE）
+        env.getCheckpointConfig().setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
+
+        // 设置 checkpoint 的存储路径
+        String checkpointPath = "file:///D:\\TMP\\FlinkCheckPointPath";
+        env.getCheckpointConfig().setCheckpointStorage(checkpointPath);
+
+        String parentPath = "D:\\Code\\Java\\flink-tutorial\\flink-learn\\src\\main\\resources\\";
 
         // 注册表
-        // kafka
+        // source
+        String sourceSqlPath = "kafka2doris\\01KafkaCreateTable.sql";
         String createKafkaTableSql = FileUtil.
-                readFile("D:\\Code\\Java\\flink-tutorial\\flink-learn\\src\\" +
-                        "main\\resources\\kafka2doris\\01KafkaCreateTable.sql");
+                readFile(parentPath + sourceSqlPath);
         TableResult kafkaTableResult = tableEnv.executeSql(createKafkaTableSql);
-        // mysql
+        // sink
+        String sinkSqlPath = "kafka2doris\\01DorisCreateTable.sql";
         String createMySQLTableSql = FileUtil.
-                readFile("D:\\Code\\Java\\flink-tutorial\\flink-learn\\src\\" +
-                        "main\\resources\\kafka2doris\\01DorisCreateTable.sql");;
+                readFile(parentPath + sinkSqlPath);
         TableResult mysqlTableResult = tableEnv.executeSql(createMySQLTableSql);
 
         // 转 Table

@@ -14,7 +14,7 @@ CREATE TABLE `doris_sink` (
     'sink.max-retries' = '3',
     'sink.properties.format' = 'json',
     'sink.enable-delete'='true',
-    'sink.label-prefix' = 'doris_label_yzhou4',
+    'sink.label-prefix' = 'doris_label_yzhou_121702',
     'sink.properties.format' = 'json',
     'sink.properties.read_json_by_line' = 'true'
 );

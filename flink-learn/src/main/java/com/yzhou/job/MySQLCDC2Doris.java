@@ -25,12 +25,17 @@ public class MySQLCDC2Doris {
 
         StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
 
+        String parentPath = "D:\\Code\\Java\\flink-tutorial\\flink-learn\\src\\main\\resources\\";
+
         // 注册表
         // source
-        String createSourceTableSql = FileUtil.readFile("D:\\Code\\Java\\flink-tutorial-main\\flink-learn\\src\\main\\resources\\mysqlcdc2doris\\01mysqlcdcCreateTable.sql");
+        String sourceSqlPath = "mysqlcdc2doris\\01mysqlcdcCreateTable.sql";
+        String createSourceTableSql = FileUtil.readFile(parentPath + sourceSqlPath);
         TableResult sourceTableResult = tableEnv.executeSql(createSourceTableSql);
         // sink
-        String createSinkTableSql = FileUtil.readFile("D:\\Code\\Java\\flink-tutorial-main\\flink-learn\\src\\main\\resources\\mysqlcdc2doris\\01DorisCreateTable.sql");;
+        String sinksqlPath = "mysqlcdc2doris\\01DorisCreateTable.sql";
+        String createSinkTableSql = FileUtil.readFile(parentPath + sinksqlPath);
+        ;
         TableResult sinkTableResult = tableEnv.executeSql(createSinkTableSql);
 
         // 转 Table
@@ -41,7 +46,7 @@ public class MySQLCDC2Doris {
         // tableEnv.createTemporaryView("kafka", kafkaTable);
 
         StreamStatementSet statementSet = tableEnv.createStatementSet();
-        statementSet.addInsert("doris_sink",sourceTable);
+        statementSet.addInsert("doris_sink", sourceTable);
 
         // 执行
         statementSet.execute();
