@@ -1,5 +1,5 @@
 CREATE TABLE payment_flow (
-    order_id BIGINT,
+    order_id BIGINT NOT NULL ,
     pay_money BIGINT
 )
 WITH (

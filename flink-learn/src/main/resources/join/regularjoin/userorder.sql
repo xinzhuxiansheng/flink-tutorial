@@ -1,5 +1,5 @@
 CREATE TABLE user_order (
-    order_id BIGINT,
+    order_id BIGINT NOT NULL ,
     ts BIGINT,
     d_timestamp AS TO_TIMESTAMP_LTZ(ts,3)
     -- 注意：d_timestamp的值可以从原始数据中取，原始数据中没有的话也可以从kafka的元数据中取
