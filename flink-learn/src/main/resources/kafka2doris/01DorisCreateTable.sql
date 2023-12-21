@@ -4,6 +4,7 @@ CREATE TABLE `doris_sink` (
      `TOTAL_AMOUNT` STRING COMMENT '',
      `TURNOVER_AMOUNT` STRING COMMENT '',
      `op_type` STRING COMMENT '',
+     `__DORIS_DELETE_SIGN__` INT,
      PRIMARY KEY (PRD_CODE) NOT ENFORCED
 )WITH (
     'connector' = 'doris',
@@ -13,11 +14,8 @@ CREATE TABLE `doris_sink` (
     'password' = '',
     'sink.max-retries' = '3',
     'sink.properties.format' = 'json',
-    'sink.enable-delete'='true',
-    'sink.label-prefix' = 'doris_label_yzhou_103',
+    'sink.enable-delete'='false',
+    'sink.label-prefix' = 'doris_label_yzhou_104',
     'sink.properties.format' = 'json',
-    'sink.properties.read_json_by_line' = 'true',
-    'sink.properties.customdelete_name' = 'op_type',
-    'sink.properties.customdelete_value' = 'D'
-
+    'sink.properties.read_json_by_line' = 'true'
 );

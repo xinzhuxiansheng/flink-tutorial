@@ -40,7 +40,7 @@ public class Kafka2Doris {
         TableResult mysqlTableResult = tableEnv.executeSql(createMySQLTableSql);
 
         // 转 Table
-        String queryKafkaTableSql = "select * from kafka_source";
+        String queryKafkaTableSql = "select *,if(op_type='D',1,0) as __DORIS_DELETE_SIGN__  from kafka_source";
         Table kafkaTable = tableEnv.sqlQuery(queryKafkaTableSql);
 
         // 创建 kafka 临时表
