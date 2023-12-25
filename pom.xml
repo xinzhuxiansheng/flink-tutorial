@@ -18,7 +18,6 @@
         <module>flink-sql</module>
         <module>flink-connectors</module>
         <module>flink-dependencies</module>
-        <module>flink-datastream</module>
     </modules>
 
     <properties>
