@@ -1,4 +1,4 @@
-package com.yzhou.job;
+package com.yzhou.job.sql;
 
 import com.yzhou.common.utils.FileUtil;
 import org.apache.flink.api.common.RuntimeExecutionMode;

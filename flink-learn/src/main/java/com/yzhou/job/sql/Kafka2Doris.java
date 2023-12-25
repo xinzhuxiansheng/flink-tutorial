@@ -1,4 +1,4 @@
-package com.yzhou.job;
+package com.yzhou.job.sql;
 
 import com.yzhou.common.utils.FileUtil;
 import org.apache.flink.api.common.RuntimeExecutionMode;
@@ -9,13 +9,15 @@ import org.apache.flink.table.api.TableResult;
 import org.apache.flink.table.api.bridge.java.StreamStatementSet;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 
-public class MySQLCDC2Doris {
+public class Kafka2Doris {
 
     public static void main(String[] args) {
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironment();
         env.setRuntimeMode(RuntimeExecutionMode.STREAMING);
         env.enableCheckpointing(5000);
+
+        StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
         // 设置 checkpoint 模式（例如，EXACTLY_ONCE 或 AT_LEAST_ONCE）
         env.getCheckpointConfig().setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
 
@@ -23,30 +25,29 @@ public class MySQLCDC2Doris {
         String checkpointPath = "file:///D:\\TMP\\FlinkCheckPointPath";
         env.getCheckpointConfig().setCheckpointStorage(checkpointPath);
 
-        StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
-
         String parentPath = "D:\\Code\\Java\\flink-tutorial\\flink-learn\\src\\main\\resources\\";
 
         // 注册表
         // source
-        String sourceSqlPath = "mysqlcdc2doris\\01mysqlcdcCreateTable.sql";
-        String createSourceTableSql = FileUtil.readFile(parentPath + sourceSqlPath);
-        TableResult sourceTableResult = tableEnv.executeSql(createSourceTableSql);
+        String sourceSqlPath = "kafka2doris\\01KafkaCreateTable.sql";
+        String createKafkaTableSql = FileUtil.
+                readFile(parentPath + sourceSqlPath);
+        TableResult kafkaTableResult = tableEnv.executeSql(createKafkaTableSql);
         // sink
-        String sinksqlPath = "mysqlcdc2doris\\01DorisCreateTable.sql";
-        String createSinkTableSql = FileUtil.readFile(parentPath + sinksqlPath);
-        ;
-        TableResult sinkTableResult = tableEnv.executeSql(createSinkTableSql);
+        String sinkSqlPath = "kafka2doris\\01DorisCreateTable.sql";
+        String createMySQLTableSql = FileUtil.
+                readFile(parentPath + sinkSqlPath);
+        TableResult mysqlTableResult = tableEnv.executeSql(createMySQLTableSql);
 
         // 转 Table
-        String querySourceTableSql = "select * from mysqlcdc_source";
-        Table sourceTable = tableEnv.sqlQuery(querySourceTableSql);
+        String queryKafkaTableSql = "select *,if(op_type='D',1,0) as __DORIS_DELETE_SIGN__  from kafka_source";
+        Table kafkaTable = tableEnv.sqlQuery(queryKafkaTableSql);
 
         // 创建 kafka 临时表
         // tableEnv.createTemporaryView("kafka", kafkaTable);
 
         StreamStatementSet statementSet = tableEnv.createStatementSet();
-        statementSet.addInsert("doris_sink", sourceTable);
+        statementSet.addInsert("doris_sink", kafkaTable);
 
         // 执行
         statementSet.execute();
