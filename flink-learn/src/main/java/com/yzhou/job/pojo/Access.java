@@ -1,7 +1,6 @@
-package com.yzhou.job;
+package com.yzhou.job.pojo;
 
 public class Access {
-
     private int categoryId;  // 类别id
     private String description; // 商品描述
     private int id; // 商品id
@@ -82,5 +81,20 @@ public class Access {
 
     public void setTs(long ts) {
         this.ts = ts;
+    }
+
+    @Override
+    public String toString() {
+        return "Access{" +
+                "categoryId=" + categoryId +
+                ", description='" + description + '\'' +
+                ", id=" + id +
+                ", ip='" + ip + '\'' +
+                ", money=" + money +
+                ", name='" + name + '\'' +
+                ", os='" + os + '\'' +
+                ", status=" + status +
+                ", ts=" + ts +
+                '}';
     }
 }

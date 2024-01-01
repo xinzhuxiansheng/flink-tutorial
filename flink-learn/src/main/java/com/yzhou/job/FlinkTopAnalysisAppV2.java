@@ -2,6 +2,7 @@ package com.yzhou.job;
 
 import com.alibaba.fastjson.JSON;
 import com.yzhou.common.utils.DateUtil;
+import com.yzhou.job.pojo.Access;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.tuple.Tuple2;
