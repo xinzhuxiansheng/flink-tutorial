@@ -14,6 +14,9 @@ import java.util.Collections;
 import java.util.concurrent.*;
 import java.util.function.Supplier;
 
+/**
+ * 异步 I/O
+ */
 public class MySQLAsyncFunction extends RichAsyncFunction<String, Tuple2<String,String>> {
 
     private transient DruidDataSource dataSource;
@@ -32,8 +35,8 @@ public class MySQLAsyncFunction extends RichAsyncFunction<String, Tuple2<String,
         dataSource = new DruidDataSource();
         dataSource.setDriverClassName("com.mysql.jdbc.Driver");
         dataSource.setUsername("root");
-        dataSource.setPassword("000000");
-        dataSource.setUrl("jdbc:mysql://hadoop000:13306/ruozedata");
+        dataSource.setPassword("12345678");
+        dataSource.setUrl("jdbc:mysql://localhost:3306/yzhou_test");
         dataSource.setMaxActive(maxConnection);
     }
 
