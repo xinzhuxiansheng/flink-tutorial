@@ -1,4 +1,4 @@
-package com.yzhou.job;
+package com.yzhou.job.app;
 
 import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 import org.apache.flink.api.common.time.Time;
@@ -15,8 +15,8 @@ import org.apache.log4j.Logger;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
-public class StreamWordCount {
-    private static Logger logger = Logger.getLogger(StreamWordCount.class);
+public class WordCountByStreamWithDataStreamApi {
+    private static Logger logger = Logger.getLogger(WordCountByStreamWithDataStreamApi.class);
 
     public static void main(String[] args) throws Exception {
         // 1. 创建流式执行环境
@@ -25,7 +25,7 @@ public class StreamWordCount {
 
         env.setRestartStrategy(RestartStrategies.fixedDelayRestart(3, Time.of(10, TimeUnit.SECONDS)));
         // 2. 读取文本流  在k8s01行运行 nc -lk 7777
-        DataStreamSource<String> lineDSS = env.socketTextStream("yzhou.com", 7777);
+        DataStreamSource<String> lineDSS = env.socketTextStream("yzhou.com", 7777,"\n");
         // 3. 转换数据格式
         SingleOutputStreamOperator<Tuple2<String, Long>> wordAndOne = lineDSS
                 .flatMap((String line, Collector<String> words) -> {
@@ -42,7 +42,6 @@ public class StreamWordCount {
                 .sum(1);
         // 6. 打印
         result.print();
-        logger.info(result.toString());
         // 7. 执行
         env.execute();
     }

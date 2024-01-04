@@ -87,6 +87,7 @@ public class FlinkSQLBaseTableFunctionApp {
 //                "activetime " +
 //                "  from userbehavior " +
 //                "left join lateral table(explodeFunction(line,'data')) as sc(package,activetime) on true "
+        // on true 表示 join 子句使用 on 后跟着一个条件来指定如何连接两个表，此时 on true 表达的是 连接条件总是满足
 //        ).execute().print();
     }
 
