@@ -293,18 +293,23 @@
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-cep</artifactId>
-            <version>1.15.4</version>
+            <version>${flink.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-cep-scala_2.12</artifactId>
-            <version>1.15.4</version>
+            <version>${flink.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.flink/flink-shaded-guava -->
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-shaded-guava</artifactId>
             <version>30.1.1-jre-15.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-statebackend-rocksdb</artifactId>
+            <version>${flink.version}</version>
         </dependency>
 
 

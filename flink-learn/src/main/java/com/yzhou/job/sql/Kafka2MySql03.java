@@ -8,7 +8,7 @@ import org.apache.flink.table.api.TableResult;
 import org.apache.flink.table.api.bridge.java.StreamStatementSet;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 
-public class Kafka2MySql01 {
+public class Kafka2MySql03 {
 
     public static void main(String[] args) {
 
@@ -20,23 +20,24 @@ public class Kafka2MySql01 {
 
         // 注册表
         // kafka
-        String createKafkaTableSql = FileUtil.readFile("/Users/a/Code/Java/flink-tutorial/flink-learn/src/main/resources/kafka2mysql/01KafkaCreateTable.sql");
-        TableResult kafkaTableResult = tableEnv.executeSql(createKafkaTableSql);
+        String createSourceTableSql = FileUtil.readFile("/Users/a/Code/Java/flink-tutorial/flink-learn/src/main/resources/kafka2mysql/02KafkaCreateTable.sql");
+        TableResult sourceTableResult = tableEnv.executeSql(createSourceTableSql);
         // mysql
-        String createMySQLTableSql = FileUtil.readFile("/Users/a/Code/Java/flink-tutorial/flink-learn/src/main/resources/kafka2mysql/01mysqlCreateTable.sql");;
-        TableResult mysqlTableResult = tableEnv.executeSql(createMySQLTableSql);
+        String createSinkTableSql = FileUtil.readFile("/Users/a/Code/Java/flink-tutorial/flink-learn/src/main/resources/kafka2mysql/02mysqlCreateTable.sql");;
+        TableResult sinkTableResult = tableEnv.executeSql(createSinkTableSql);
 
         // 转 Table
-        String queryKafkaTableSql = "select * from kafka_source";
-        Table kafkaTable = tableEnv.sqlQuery(queryKafkaTableSql);
+        String querySourceTableSql = "select * from kafka_source";
+        Table sourceTable = tableEnv.sqlQuery(querySourceTableSql);
 
         // 创建 kafka 临时表
         // tableEnv.createTemporaryView("kafka", kafkaTable);
+         tableEnv.toDataStream(sourceTable);
+
+
 
         StreamStatementSet statementSet = tableEnv.createStatementSet();
-        statementSet.addInsert("mysql_sink",kafkaTable);
-
-
+        statementSet.addInsert("mysql_sink",sourceTable);
 
         // 执行
         statementSet.execute();
