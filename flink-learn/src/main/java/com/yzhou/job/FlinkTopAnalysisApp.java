@@ -15,6 +15,7 @@ public class FlinkTopAnalysisApp {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
+
         // step1: 接入要处理的数据源
         DataStreamSource<String> source = env.readTextFile("data/productaccess.log");
 

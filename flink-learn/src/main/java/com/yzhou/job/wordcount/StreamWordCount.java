@@ -4,6 +4,7 @@ import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 import org.apache.flink.api.common.time.Time;
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
@@ -19,6 +20,7 @@ public class StreamWordCount {
 
     public static void main(String[] args) throws Exception {
         // 1. 创建流式执行环境
+<<<<<<< HEAD:flink-learn/src/main/java/com/yzhou/job/wordcount/StreamWordCount.java
         StreamExecutionEnvironment env = StreamExecutionEnvironment
                 .getExecutionEnvironment();
         env.setRestartStrategy(RestartStrategies
@@ -26,6 +28,12 @@ public class StreamWordCount {
         // 2. nc -lk 7777
         DataStreamSource<String> lineDSS = env.
                 socketTextStream("localhost", 7777);
+=======
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironmentWithWebUI(new Configuration());
+        env.setRestartStrategy(RestartStrategies.fixedDelayRestart(3, Time.of(10, TimeUnit.SECONDS)));
+        // 2. 读取文本流  在k8s01行运行 nc -lk 7777
+        DataStreamSource<String> lineDSS = env.socketTextStream("localhost", 7777);
+>>>>>>> fdb9cc9687abf0f211fdd12e91342fdf553f1341:flink-learn/src/main/java/com/yzhou/job/StreamWordCount2.java
         // 3. 转换数据格式
         SingleOutputStreamOperator<Tuple2<String, Long>> wordAndOne = lineDSS
                 .flatMap((String line, Collector<String> words) -> {

@@ -1,4 +1,4 @@
-package com.yzhou.job.sql;
+package com.yzhou.job.udf;
 
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStream;

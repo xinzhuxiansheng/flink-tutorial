@@ -1,1 +1,1 @@
-com.yzhou.connector.http.HttpTableFactory
+com.yzhou.connector.http.HttpDynamicTableFactory

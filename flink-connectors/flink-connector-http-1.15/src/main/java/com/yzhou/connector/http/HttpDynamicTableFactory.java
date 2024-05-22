@@ -1,24 +1,28 @@
 package com.yzhou.connector.http;
 
 import org.apache.flink.api.common.serialization.DeserializationSchema;
+import org.apache.flink.api.common.serialization.SerializationSchema;
 import org.apache.flink.configuration.ConfigOption;
 import org.apache.flink.configuration.ConfigOptions;
 import org.apache.flink.configuration.ReadableConfig;
+import org.apache.flink.table.api.TableSchema;
 import org.apache.flink.table.connector.format.DecodingFormat;
+import org.apache.flink.table.connector.format.EncodingFormat;
+import org.apache.flink.table.connector.sink.DynamicTableSink;
 import org.apache.flink.table.connector.source.DynamicTableSource;
 import org.apache.flink.table.data.RowData;
-import org.apache.flink.table.factories.DeserializationFormatFactory;
-import org.apache.flink.table.factories.DynamicTableSourceFactory;
-import org.apache.flink.table.factories.FactoryUtil;
+import org.apache.flink.table.factories.*;
 import org.apache.flink.table.types.DataType;
+import org.apache.flink.util.Preconditions;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
  * 用于将 CatalogTable 的元数据转换为 DynamicTableSource
  */
-public class HttpTableFactory implements DynamicTableSourceFactory {
+public class HttpDynamicTableFactory implements DynamicTableSourceFactory, DynamicTableSinkFactory {
 
     // 定义所有配置项
     // define all options statically
@@ -26,10 +30,15 @@ public class HttpTableFactory implements DynamicTableSourceFactory {
             .stringType()
             .noDefaultValue();
 
-    public static final ConfigOption<String> MODE = ConfigOptions.key("http.mode")
+    public static final ConfigOption<String> METHOD = ConfigOptions.key("http.method")
             .stringType()
             .defaultValue("get");
 
+    /*
+        read.streaming.enabled
+        read.streaming.check-interval
+        这两个参数控制 HttpSourceFunction#run()读取方式
+     */
     public static final ConfigOption<Boolean> READ_AS_STREAMING = ConfigOptions.key("read.streaming.enabled")
             .booleanType()
             .defaultValue(false)// default read as batch
@@ -47,10 +56,14 @@ public class HttpTableFactory implements DynamicTableSourceFactory {
         return "http"; // used for matching to `connector = '...'`
     }
 
+    /**
+     * 要求参数
+     */
     @Override
     public Set<ConfigOption<?>> requiredOptions() {
         final Set<ConfigOption<?>> options = new HashSet<>();
         options.add(URL);
+        options.add(METHOD);
         // 解码的格式器使用预先定义的配置项
         options.add(FactoryUtil.FORMAT); // use pre-defined option for format
         return options;
@@ -59,7 +72,6 @@ public class HttpTableFactory implements DynamicTableSourceFactory {
     @Override
     public Set<ConfigOption<?>> optionalOptions() {
         final Set<ConfigOption<?>> options = new HashSet<>();
-        options.add(MODE);
         options.add(READ_AS_STREAMING);
         options.add(READ_STREAMING_CHECK_INTERVAL);
         return options;
@@ -86,7 +98,7 @@ public class HttpTableFactory implements DynamicTableSourceFactory {
         // get the validated options
         final ReadableConfig options = helper.getOptions();
         final String url = options.get(URL);
-        final String mode = options.get(MODE);
+        final String method = options.get(METHOD);
         final boolean isStreaming = options.get(READ_AS_STREAMING);
         final long interval = options.get(READ_STREAMING_CHECK_INTERVAL);
 
@@ -97,6 +109,50 @@ public class HttpTableFactory implements DynamicTableSourceFactory {
 
         // 创建并返回动态表 source
         // create and return dynamic table source
-        return new HttpTableSource(url, mode, isStreaming, interval, decodingFormat, producedDataType);
+        return new HttpDynamicTableSource(url, method, isStreaming, interval, decodingFormat, producedDataType);
     }
+
+//    @Override
+//    public DynamicTableSink createDynamicTableSink(Context context) {
+//        FactoryUtil.TableFactoryHelper helper = FactoryUtil.createTableFactoryHelper(this, context);
+//        ReadableConfig config = helper.getOptions();
+//        // 校验参数
+//        helper.validate();
+//        // 自定义一些配置校验参数
+//        this.validateConfigOptions(config);
+//        HttpSourceInfo httpSourceInfo = this.getHttpSource(config);
+//        // discover a suitable encoding format
+//        final EncodingFormat<SerializationSchema<RowData>> encodingFormat = helper.discoverEncodingFormat(
+//                SerializationFormatFactory.class,
+//                FactoryUtil.FORMAT);
+//
+//        // derive the produced data type (excluding computed columns) from the catalog table
+//        final DataType producedDataType = context.getCatalogTable().getSchema().toPhysicalRowDataType();
+//        TableSchema tableSchema = context.getCatalogTable().getSchema();
+//        return new HttpDynamicTableSink(httpSourceInfo, encodingFormat, producedDataType, tableSchema);
+//    }
+
+    @Override
+    public Set<ConfigOption<?>> forwardOptions() {
+        return DynamicTableSourceFactory.super.forwardOptions();
+    }
+
+    @Override
+    public DynamicTableSink createDynamicTableSink(Context context) {
+        return null;
+    }
+
+
+    // 参数校验，根据实际情况去实现需要校验哪些参数，比如有些参数有格式校验可以在这里实现，没有可以不实现
+//    private void validateConfigOptions(ReadableConfig config) {
+//        String url = config.get(URL);
+//        Optional<String> urlOp = Optional.of(url);
+//        Preconditions.checkState(urlOp.isPresent(), "Cannot handle such http url: " + url);
+//        String type = config.get(TYPE);
+//        if ("POST".equalsIgnoreCase(type)) {
+//            String body = config.get(BODY);
+//            Optional<String> bodyOp = Optional.of(body);
+//            Preconditions.checkState(bodyOp.isPresent(), "Cannot handle such http post body: " + bodyOp);
+//        }
+//    }
 }

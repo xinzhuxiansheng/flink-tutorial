@@ -43,8 +43,6 @@ public class Demo9_EventTimeAndWatermark3 {
 
         // tenv.executeSql("select guid,eventId,rt,current_watermark(rt) as wm from t_events").print();
 
-
-
         DataStream<Row> ds = tenv.toDataStream(tenv.from("t_events"));
 
         ds.process(new ProcessFunction<Row, String>() {

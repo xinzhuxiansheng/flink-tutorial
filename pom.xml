@@ -18,6 +18,8 @@
         <module>flink-sql</module>
         <module>flink-connectors</module>
         <module>flink-dependencies</module>
+        <module>flink-jar</module>
+        <module>flink-udf</module>
     </modules>
 
     <properties>

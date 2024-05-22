@@ -7,6 +7,7 @@ import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.TableResult;
 import org.apache.flink.table.api.bridge.java.StreamStatementSet;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
+import org.apache.flink.table.functions.ScalarFunction;
 
 public class Kafka2MySql01 {
 
@@ -40,3 +41,5 @@ public class Kafka2MySql01 {
         statementSet.execute();
     }
 }
+
+
