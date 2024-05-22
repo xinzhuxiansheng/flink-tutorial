@@ -10,23 +10,23 @@ import org.apache.flink.table.connector.source.SourceFunctionProvider;
 import org.apache.flink.table.data.RowData;
 import org.apache.flink.table.types.DataType;
 
-public class HttpTableSource implements ScanTableSource {
+public class HttpDynamicTableSource implements ScanTableSource {
     private final String url;
-    private final String mode;
+    private final String method;
     private final boolean isStreaming;
     private final long interval;
     private final DecodingFormat<DeserializationSchema<RowData>> decodingFormat;
     private final DataType producedDataType;
 
-    public HttpTableSource(
+    public HttpDynamicTableSource(
             String hostname,
-            String mode,
+            String method,
             boolean isStreaming,
             long interval,
             DecodingFormat<DeserializationSchema<RowData>> decodingFormat,
             DataType producedDataType) {
         this.url = hostname;
-        this.mode = mode;
+        this.method = method;
         this.isStreaming = isStreaming;
         this.interval = interval;
         this.decodingFormat = decodingFormat;
@@ -51,14 +51,14 @@ public class HttpTableSource implements ScanTableSource {
                 runtimeProviderContext,
                 producedDataType);
 
-        final SourceFunction<RowData> sourceFunction = new HttpSourceFunction(url, mode, isStreaming, interval, deserializer);
+        final SourceFunction<RowData> sourceFunction = new HttpSourceFunction(url, method, isStreaming, interval, deserializer);
 
         return SourceFunctionProvider.of(sourceFunction, !isStreaming);
     }
 
     @Override
     public DynamicTableSource copy() {
-        return new HttpTableSource(url, mode, isStreaming, interval, decodingFormat, producedDataType);
+        return new HttpDynamicTableSource(url, method, isStreaming, interval, decodingFormat, producedDataType);
     }
 
     @Override

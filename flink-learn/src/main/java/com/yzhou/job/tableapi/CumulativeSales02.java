@@ -15,7 +15,7 @@ public class CumulativeSales02 {
 
         TableEnvironment tEnv = TableEnvironment.create(settings);
 
-        String sourceSql = FileUtil.readFile("/Users/a/Code/Java/flink-tutorial/flink-learn/src/main/resources/source/source01.sql");
+        String sourceSql = FileUtil.readFile("/Users/a/Code/Java/flink-tutorial/flink-learn/src/main/resources/source/datagenSource01.sql");
         tEnv.executeSql(sourceSql);
 
         String sinksql = FileUtil.readFile("/Users/a/Code/Java/flink-tutorial/flink-learn/src/main/resources/sink/print02.sql");

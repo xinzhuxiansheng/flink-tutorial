@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class FlinkPropertiesException extends BizRuntimeException {
-
     public FlinkPropertiesException(BizExceptionInfo info) {
         super(info);
     }

@@ -13,17 +13,17 @@ public class HttpSourceFunction extends RichSourceFunction<RowData> {
 
     private volatile boolean isRunning = true;
     private String url;
-    private String mode;
+    private String method;
     private boolean isStreaming;
     private long interval;
     private DeserializationSchema<RowData> deserializer;
     // count out event
     private transient Counter counter;
 
-    public HttpSourceFunction(String url, String mode, boolean isStreaming,
+    public HttpSourceFunction(String url, String method, boolean isStreaming,
                               long interval, DeserializationSchema<RowData> deserializer) {
         this.url = url;
-        this.mode = mode;
+        this.method = method;
         this.isStreaming = isStreaming;
         this.interval = interval;
         this.deserializer = deserializer;
@@ -45,7 +45,9 @@ public class HttpSourceFunction extends RichSourceFunction<RowData> {
                 try {
                     // 接收http消息
                     // receive http message
-                    String message = mode.equalsIgnoreCase("get") ? HttpClientUtil.get(url) : HttpClientUtil.post(url, "");
+                    String message = method.equalsIgnoreCase("get") ? HttpClientUtil.get(url) : HttpClientUtil.post(url, "");
+                    // TODO 暂时还没有解析 code，data 这种
+
                     // 解码并处理记录
                     // deserializer message
                     ctx.collect(deserializer.deserialize(message.getBytes()));
@@ -59,7 +61,7 @@ public class HttpSourceFunction extends RichSourceFunction<RowData> {
         } else {
             try {
                 // receive http message
-                String message = mode.equalsIgnoreCase("get") ? HttpClientUtil.get(url) : HttpClientUtil.post(url, "");
+                String message = method.equalsIgnoreCase("get") ? HttpClientUtil.get(url) : HttpClientUtil.post(url, "");
                 // deserializer message
                 ctx.collect(deserializer.deserialize(message.getBytes()));
                 this.counter.inc();

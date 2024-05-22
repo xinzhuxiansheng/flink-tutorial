@@ -1,4 +1,4 @@
-package com.yzhou.job.sql;
+package com.yzhou.job.udf;
 
 import com.yzhou.common.utils.FileUtil;
 import org.apache.flink.api.common.RuntimeExecutionMode;
@@ -9,7 +9,7 @@ import org.apache.flink.table.api.bridge.java.StreamStatementSet;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.apache.flink.table.functions.ScalarFunction;
 
-public class Kafka2MySql01 {
+public class Kafka2MySqlWithUDF {
 
     public static void main(String[] args) {
 
@@ -21,14 +21,17 @@ public class Kafka2MySql01 {
 
         // 注册表
         // kafka
-        String createKafkaTableSql = FileUtil.readFile("/Users/a/Code/Java/flink-tutorial/flink-learn/src/main/resources/kafka2mysql/01KafkaCreateTable.sql");
+        String createKafkaTableSql = FileUtil.readFile("/Users/a/Code/Java/flink-tutorial/flink-learn/src/main/resources/kafka2mysql/03KafkaCreateTable.sql");
         TableResult kafkaTableResult = tableEnv.executeSql(createKafkaTableSql);
         // mysql
-        String createMySQLTableSql = FileUtil.readFile("/Users/a/Code/Java/flink-tutorial/flink-learn/src/main/resources/kafka2mysql/01mysqlCreateTable.sql");;
+        String createMySQLTableSql = FileUtil.readFile("/Users/a/Code/Java/flink-tutorial/flink-learn/src/main/resources/kafka2mysql/03mysqlCreateTable.sql");;
         TableResult mysqlTableResult = tableEnv.executeSql(createMySQLTableSql);
 
+        // 注册UDF
+        tableEnv.createTemporarySystemFunction("AddSuffix", new AddSuffix("_suffix"));
+
         // 转 Table
-        String queryKafkaTableSql = "select * from kafka_source";
+        String queryKafkaTableSql = "select id,AddSuffix(name),address,ext_field01 from kafka_source";
         Table kafkaTable = tableEnv.sqlQuery(queryKafkaTableSql);
 
         // 创建 kafka 临时表
@@ -40,6 +43,16 @@ public class Kafka2MySql01 {
         // 执行
         statementSet.execute();
     }
+
+    public static class AddSuffix extends ScalarFunction {
+        private final String suffix;
+
+        public AddSuffix(String suffix) {
+            this.suffix = suffix;
+        }
+
+        public String eval(String s) {
+            return s + suffix;
+        }
+    }
 }
-
-
