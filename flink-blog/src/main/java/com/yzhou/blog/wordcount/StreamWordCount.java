@@ -1,4 +1,4 @@
-package com.yzhou.job.wordcount;
+package com.yzhou.blog.wordcount;
 
 import org.apache.flink.api.common.restartstrategy.RestartStrategies;
 import org.apache.flink.api.common.time.Time;
@@ -26,7 +26,7 @@ public class StreamWordCount {
                 .getExecutionEnvironment(new Configuration());
         env.setRestartStrategy(RestartStrategies
                 .fixedDelayRestart(3, Time.of(10, TimeUnit.SECONDS)));
-        // 2. 读取文本流  在k8s01行运行 nc -lk 7777
+        // 2. Socket 读取  nc -lk 7777
         DataStreamSource<String> lineDSS = env
                 .socketTextStream("localhost", 7777);
 

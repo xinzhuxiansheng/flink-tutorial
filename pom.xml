@@ -20,6 +20,7 @@
         <module>flink-dependencies</module>
         <module>flink-jar</module>
         <module>flink-udf</module>
+        <module>flink-blog</module>
     </modules>
 
     <properties>
