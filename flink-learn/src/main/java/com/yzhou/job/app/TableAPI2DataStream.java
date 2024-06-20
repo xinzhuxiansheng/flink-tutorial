@@ -15,7 +15,7 @@ public class TableAPI2DataStream {
         StreamExecutionEnvironment env =
                 StreamExecutionEnvironment.getExecutionEnvironment();
 
-        String sql = FileUtil.readFile("D:\\Code\\Java\\flink-tutorial\\flink-learn\\src\\main\\resources\\mysql\\jdbc01.sql");
+        String sql = FileUtil.readFile("D:\\Code\\Java\\flink-tutorial\\flink-learn\\src\\main\\resources\\mysql\\jdbc02.sql");
 
         EnvironmentSettings bsSettings =
                 EnvironmentSettings.newInstance()
@@ -29,7 +29,7 @@ public class TableAPI2DataStream {
 
         tableEnv.executeSql(sql);
 
-        String selectSql = "SELECT * FROM mysql_test";
+        String selectSql = "SELECT * FROM yzhou_test01";
         Table table =  tableEnv.sqlQuery(selectSql);
 
         DataStream<Row> dataStream =  tableEnv.toDataStream(table, Row.class);
