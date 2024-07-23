@@ -28,11 +28,11 @@ public class Kafka2MySql04 {
                 "  )\n" +
                 "WITH\n" +
                 "  (\n" +
-                "    'properties.bootstrap.servers' = '192.168.64.112:9092',\n" +
+                "    'properties.bootstrap.servers' = '192.168.0.201:9092',\n" +
                 "    'connector' = 'kafka',\n" +
                 "    'json.ignore-parse-errors' = 'false',\n" +
                 "    'format' = 'json',\n" +
-                "    'topic' = 'yzhoujsontp13',\n" +
+                "    'topic' = 'yzhoujsontp01',\n" +
                 "    'properties.group.id' = 'testGroup-gid072102',\n" +
                 "    'scan.startup.mode' = 'earliest-offset',\n" +
                 "    'json.fail-on-missing-field' = 'false'\n" +
@@ -51,10 +51,10 @@ public class Kafka2MySql04 {
                 "  (\n" +
                 "    'password' = '123456',\n" +
                 "    'connector' = 'jdbc',\n" +
-                "    'table-name' = 'yzhou_test02',\n" +
+                "    'table-name' = 'yzhou_test03',\n" +
                 "    'sink.parallelism' = '1',\n" +
-                "    'url' = 'jdbc:mysql://192.168.0.13:3306/drc_test',\n" +
-                "    'username' = 'drc_test'\n" +
+                "    'url' = 'jdbc:mysql://192.168.0.202:3306/yzhou_test',\n" +
+                "    'username' = 'root'\n" +
                 "  )";
         TableResult mysqlTableResult = tableEnv.executeSql(createMySQLTableSql);
 
