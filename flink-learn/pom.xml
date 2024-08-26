@@ -12,15 +12,15 @@
     <artifactId>flink-learn</artifactId>
 
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <target.java.version>11</target.java.version>
+        <target.java.version>8</target.java.version>
 
         <scala.version>2.12.18</scala.version>
         <scala.binary.version>2.12</scala.binary.version>
         <log4j.version>2.18.0</log4j.version>
-        <flink.version>1.15.1</flink.version>
+        <flink.version>1.17.2</flink.version>
         <hbase.version>2.1.3</hbase.version>
         <slf4j.version>1.7.30</slf4j.version>
 
@@ -185,6 +185,7 @@
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-table-planner_${scala.binary.version}</artifactId>
             <version>${flink.version}</version>
+            <scope>provided</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.flink/flink-shaded-guava -->
         <dependency>
@@ -238,8 +239,14 @@
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-connector-jdbc</artifactId>
-            <version>1.15.4</version>
+            <version>3.1.2-1.17</version>
+            <scope>provided</scope>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.apache.flink</groupId>-->
+<!--            <artifactId>flink-connector-jdbc</artifactId>-->
+<!--            <version>1.15.4</version>-->
+<!--        </dependency>-->
 
         <!-- 引入日志管理相关依赖-->
         <dependency>
