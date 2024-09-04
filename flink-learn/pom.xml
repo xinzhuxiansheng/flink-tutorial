@@ -366,30 +366,30 @@
                 </configuration>
             </plugin>
 
-            <plugin>
-                <groupId>net.alchim31.maven</groupId>
-                <artifactId>scala-maven-plugin</artifactId>
-                <version>4.8.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <args>
-                        <arg>-unchecked</arg>
-                        <arg>-deprecation</arg>
-                        <arg>-explaintypes</arg>
-                    </args>
-                    <jvmArgs>
-                        <jvmArg>-Xms64m</jvmArg>
-                        <jvmArg>-Xmx1024m</jvmArg>
-                    </jvmArgs>
-                </configuration>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>net.alchim31.maven</groupId>-->
+<!--                <artifactId>scala-maven-plugin</artifactId>-->
+<!--                <version>4.8.0</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>compile</goal>-->
+<!--                            <goal>testCompile</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--                <configuration>-->
+<!--                    <args>-->
+<!--                        <arg>-unchecked</arg>-->
+<!--                        <arg>-deprecation</arg>-->
+<!--                        <arg>-explaintypes</arg>-->
+<!--                    </args>-->
+<!--                    <jvmArgs>-->
+<!--                        <jvmArg>-Xms64m</jvmArg>-->
+<!--                        <jvmArg>-Xmx1024m</jvmArg>-->
+<!--                    </jvmArgs>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
 
         </plugins>
     </build>
