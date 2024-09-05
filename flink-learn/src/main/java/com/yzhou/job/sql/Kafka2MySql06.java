@@ -29,7 +29,7 @@ public class Kafka2MySql06 {
             + "  )\n"
             + "WITH\n"
             + "  (\n"
-            + "    'properties.bootstrap.servers' = 'vm01:9092',\n"
+            + "    'properties.bootstrap.servers' = '192.168.0.201:9092',\n"
             + "    'connector' = 'kafka',\n"
             + "    'json.ignore-parse-errors' = 'false',\n"
             + "    'format' = 'json',\n"
@@ -52,7 +52,7 @@ public class Kafka2MySql06 {
             + "    'connector' = 'jdbc',\n"
             + "    'table-name' = 'st_output01',\n"
             + "    'sink.parallelism' = '1',\n"
-            + "    'url' = 'jdbc:mysql://vm01:3306/yzhou_test',\n"
+            + "    'url' = 'jdbc:mysql://192.168.0.201:3306/yzhou_test',\n"
             + "    'username' = 'root'\n"
             + "  )";
         TableResult mysqlTableResult = tableEnv.executeSql(createMySQLTableSql);
