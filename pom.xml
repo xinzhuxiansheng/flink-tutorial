@@ -21,6 +21,7 @@
         <module>flink-jar</module>
         <module>flink-udf</module>
         <module>flink-blog</module>
+        <module>flink-demo01</module>
     </modules>
 
     <properties>
